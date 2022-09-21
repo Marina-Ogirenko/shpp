@@ -1,15 +1,23 @@
 function Product () {
-    this.ID = "1"; //не сделано
+    this.ID;
     this.description;
     this.name;
     this.price;
     this.brand;
     this.sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-    this.activeSize; //не сделано
+    this.activeSize;
     this.quantity;
-    this.date; //не сделано
+    this.date; 
    // this.reviews = [new Reviews(ID)];
     this.images=''; //не сделано
+
+this.setID = function(productID) {
+  this.ID = productID;
+}
+
+this.getID = function() {
+  return this.ID;
+}
 
     this.setName = function(productName) {
       console.log(`Hello, I'm ${productName}`)
@@ -94,21 +102,59 @@ function Product () {
         this.quantity=productQuantity;
     }
 
-  }
+    this.getQuantity = function(){
+      return this.quantity;
+    }
 
-  /*
-  function Reviews (ID, date, comment){
+    this.setActiveSize = function(productActiveSize) {
+
+      for (let item of this.sizes) {
+        if(item == productActiveSize) {
+          this.activeSize = productActiveSize;
+          return;
+        }
+      }
+      
+      if(this.activeSize != productActiveSize) {
+        console.log("Такого значения не существует!");
+        return;
+      }
+      };
+
+  this.getActiveSize = function() {
+    return this.activeSize;
+  };
+
+  this.setDate = function(productDate) {
+    if(Date.parse(productDate) != Nan) {
+      this.date = new Date( Date.parse(productDate));
+    }
+    else 
+    console.log("Введи дату в формате 'YYYY-MM-DDTHH:mm:ss.sss'");
+  };
+
+  this.getDate = function() {
+    return this.date;
+  };
+
+  /**function Reviews (ID, date, comment){
     this.ID = ID;
     this.author = author;
     this.date = date;
     this.comment = comment;
     this.rating;
+  };
+  /** */
+
+
   }
-  */
+
   
   let oneProduct = new Product();
   oneProduct.setName('Karell');
+  oneProduct.setActiveSize('XS');
   console.log(oneProduct);
   console.log(oneProduct.getName());
+
 
   
