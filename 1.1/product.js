@@ -1,213 +1,253 @@
-function Product (productID, productName, productDescription, productPrice,
+function Product(productID, productName, productDescription, productPrice,
   productBrand, productQuantity, productActiveSize, productDate) {
-    this.ID;
-    this.description;
-    this.name;
-    this.price;
-    this.brand;
-    this.sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-    this.activeSize;
-    this.quantity;
-    this.date; 
-    this.reviews = [];
-    this.images=[]; //не сделано
+  this.ID;
+  this.description;
+  this.name;
+  this.price;
+  this.brand;
+  this.sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+  this.activeSize;
+  this.quantity;
+  this.date;
+  this.reviews = [];
+  this.images = [];
 
-this.setID = function(productID) {
-  this.ID = productID;
-}
+  this.setImages = function (pathImg) {
+    var img = new Image();
+    img.src = pathImg;
+    this.images.push(img);
+  }
 
-this.setID(productID);
-
-this.getID = function() {
-  return this.ID;
-}
-
-this.setName = function(productName) {
-      console.log(`Hello, I'm ${productName}`)
-
-        if (typeof(productName)!="string") {
-            console.log("Введено число, введи имя!");
-           return;
-        }
-
-        if (productName.length < 3) {
-          console.log("Имя слишком короткое, должно быть более 3 символов");
-          return;
-          }
-        
-          this.name = productName;
-        };
-
-    this.setName(productName);
-
-    this.getName = function() {
-      return this.name;
-    };
-
-    this.setDescription = function(productDescription) {
-      if(productDescription.length<5) {
-        console.log("Имя слишком короткое, должно быть более 5 символов");
-        return;
-      }
-      this.description = productDescription;
-    };
-
-    this.setDescription(productDescription);
-
-    this.getDescription = function() {
-      return this.description;
-    };
-
-    this.setPrice = function(productPrice) {
-      if(typeof(productPrice)!='number') {
-        console.log("Должны быть цифры!");
-        return;
-      }
-
-        if(productPrice<0 && productPrice>10000) {
-          console.log("Некорректное значение!");
-        return;
-        }
-
-        this.price=productPrice;
+  this.getImage = function (numberImg) {
+    if (numberImg = undefined) {
+      return (this.images[0])
     }
 
-    this.setPrice(productPrice);
+    if (numberImg <= this.images.length) {
+      return (this.images[numberImg])
+    }
+    console.log("Картинки с таким ключем не существует");
+  }
 
-    this.getPrice =function() {
-      return this.price;
+  this.setID = function (productID) {
+    this.ID = productID;
+  }
+
+  this.setID(productID);
+
+  this.getID = function () {
+    return this.ID;
+  }
+
+  this.setName = function (productName) {
+    console.log(`Hello, I'm ${productName}`)
+
+    if (typeof (productName) != "string") {
+      console.log("Введено число, введи имя!");
+      return;
     }
 
-    this.setBrand = function(productBrand) {
-
-        if (typeof(productBrand)!="string") {
-            console.log("Введено число, введи имя!");
-           return;
-        }
-
-        if (productBrand.length < 3) {
-          console.log("Имя слишком короткое, должно быть более 3 символов");
-          return;
-        }
-        
-        this.brand = productBrand;
-        };
-
-        this.setBrand(productBrand);
-
-    this.getBrand = function() {
-      return this.brand;
-    };
-
-    this.setQuantity = function(productQuantity) {
-      if(typeof(productQuantity)!='number') {
-        console.log("Должны быть цифры!");
-        return;
-      }
-
-        if(productQuantity<0 && productQuantity>10000) {
-          console.log("Некорректное значение!");
-        return;
-        }
-
-        this.quantity=productQuantity;
+    if (productName.length < 3) {
+      console.log("Имя слишком короткое, должно быть более 3 символов");
+      return;
     }
 
-    this.getQuantity = function(){
-      return this.quantity;
+    this.name = productName;
+  };
+
+  this.setName(productName);
+
+  this.getName = function () {
+    return this.name;
+  };
+
+  this.setDescription = function (productDescription) {
+    if (productDescription.length < 5) {
+      console.log("Имя слишком короткое, должно быть более 5 символов");
+      return;
+    }
+    this.description = productDescription;
+  };
+
+  this.setDescription(productDescription);
+
+  this.getDescription = function () {
+    return this.description;
+  };
+
+  this.setPrice = function (productPrice) {
+    if (typeof (productPrice) != 'number') {
+      console.log("Должны быть цифры!");
+      return;
     }
 
-    this.setQuantity(productQuantity);
+    if (productPrice < 0 && productPrice > 10000) {
+      console.log("Некорректное значение!");
+      return;
+    }
 
-    this.setActiveSize = function(productActiveSize) {
+    this.price = productPrice;
+  }
 
-      for (let item of this.sizes) {
-        if(item == productActiveSize) {
-          this.activeSize = productActiveSize;
-          return;
-        }
-      }
-      
-      if(this.activeSize != productActiveSize) {
-        console.log("Такого значения не существует!");
+  this.setPrice(productPrice);
+
+  this.getPrice = function () {
+    return this.price;
+  }
+
+  this.setBrand = function (productBrand) {
+
+    if (typeof (productBrand) != "string") {
+      console.log("Введено число, введи имя!");
+      return;
+    }
+
+    if (productBrand.length < 3) {
+      console.log("Имя слишком короткое, должно быть более 3 символов");
+      return;
+    }
+
+    this.brand = productBrand;
+  };
+
+  this.setBrand(productBrand);
+
+  this.getBrand = function () {
+    return this.brand;
+  };
+
+  this.setQuantity = function (productQuantity) {
+    if (typeof (productQuantity) != 'number') {
+      console.log("Должны быть цифры!");
+      return;
+    }
+
+    if (productQuantity < 0 && productQuantity > 10000) {
+      console.log("Некорректное значение!");
+      return;
+    }
+
+    this.quantity = productQuantity;
+  }
+
+  this.getQuantity = function () {
+    return this.quantity;
+  }
+
+  this.setQuantity(productQuantity);
+
+  this.setActiveSize = function (productActiveSize) {
+
+    for (let item of this.sizes) {
+      if (item == productActiveSize) {
+        this.activeSize = productActiveSize;
         return;
       }
-      };
+    }
 
-      this.setActiveSize(productActiveSize);
+    if (this.activeSize != productActiveSize) {
+      console.log("Такого значения не существует!");
+      return;
+    }
+  };
 
-  this.getActiveSize = function() {
+  this.setActiveSize(productActiveSize);
+
+  this.getActiveSize = function () {
     return this.activeSize;
   };
 
-  this.setDate = function(productDate) {
-    if(Date.parse(productDate) != Nan) {
-      this.date = new Date( Date.parse(productDate));
+  this.setDate = function (productDate) {
+    if (Date.parse(productDate) != Nan) {
+      this.date = new Date(Date.parse(productDate));
     }
-    else 
-    console.log("Введи дату в формате 'YYYY-MM-DDTHH:mm:ss.sss'");
+    else
+      console.log("Введи дату в формате 'YYYY-MM-DDTHH:mm:ss.sss'");
   };
 
-  this.getDate = function() {
+  this.getDate = function () {
     return this.date;
   };
 
   this.setDate(productDate);
 
-  function Reviews (ID, date, comment, author, rating){
-    this.ID;
+  function Reviews(ID, date, comment, author, keyRating, valueRating) {
+    this.IDrew;
     this.author;
     this.date;
     this.comment;
-    this.rating = [];
+    this.rating = {
+      'service': null,
+      'price': null,
+      'value': null,
+      'quality': null
+    };
 
-    this.setID = function(productID) {
-      this.ID = productID;
+    this.setRating = function (keyRating, valueRating) {
+      if (typeof (valueRating) == Number || valueRating <= 0 || valueRating > 10) {
+        console.log("Некорректное значение!");
+        return;
+      }
+      if (rating.keyRating != undefined) {
+        rating.keyRating = valueRating;
+        return;
+      }
+      console.log("Такого ключа нет!")
     }
-    
+
+    this.setRating(keyRating, valueRating);
+
+    this.getRating = function () {
+      return rating.keyRating;
+    }
+
+    this.setID = function (ID) {
+      this.IDrew = ID;
+    }
+
     this.setID(ID);
-    
-    this.getID = function() {
-      return this.ID;
-    } 
 
-    this.setAuthor = function(author) {
+    this.getID = function () {
+      return this.IDrew;
+    }
 
-        if (typeof(author)!="string") {
-            console.log("Введено число, введи имя!");
-           return;
-        }
+    this.setAuthor = function (author) {
 
-        if (author.length < 3) {
-          console.log("Имя слишком короткое, должно быть более 3 символов");
-          return;
-          }
-        
-          this.author = author;
-        };
+      if (typeof (author) != "string") {
+        console.log("Введено число, введи имя!");
+        return;
+      }
+
+      if (author.length < 3) {
+        console.log("Имя слишком короткое, должно быть более 3 символов");
+        return;
+      }
+
+      this.author = author;
+    };
 
     this.setAuthor(author);
 
-    this.getAuthor = function() {
+    this.getAuthor = function () {
       return this.author;
     };
 
-    this.setDate = function(date) {
-      if(Date.parse(date) != Nan) {
-        this.date = new Date( Date.parse(date));
+    this.setDate = function (date) {
+      if (Date.parse(date) != Nan) {
+        this.date = new Date(Date.parse(date));
       }
-      else 
-      console.log("Введи дату в формате 'YYYY-MM-DDTHH:mm:ss.sss'");
+      else
+        console.log("Введи дату в формате 'YYYY-MM-DDTHH:mm:ss.sss'");
     };
-  
-    this.getDate = function() {
+
+    this.getDate = function () {
       return this.date;
     };
-  
+
     this.setDate(date);
 
-    this.setComment = function(comment) {
-      if(comment.length<5) {
+    this.setComment = function (comment) {
+      if (comment.length < 5) {
         console.log("Имя слишком короткое, должно быть более 5 символов");
         return;
       }
@@ -216,51 +256,76 @@ this.setName = function(productName) {
 
     this.setComment(comment);
 
-    this.getComment = function() {
+    this.getComment = function () {
       return this.comment;
     };
 
-    this.setRating = function(rating) {
-      if(typeof(rating)!='number') {
-        console.log("Должны быть цифры!");
-        return;
-      }
-
-      //Associate Array - rating['key']=value; key one of 'service', 'price', 'value', 'quality'
-       
-      if(rating<=0 || rating>10000) {
-          console.log("Некорректное значение!");
-        return;
-        }
-
-        this.price=productPrice;
-    }
-
-    this.setPrice(productPrice);
-
-    this.getPrice =function() {
-      return this.price;
-    }
-
-
   };
-  
-  this.addReview = function(ID, date, comment,  author, rating) {
-this.reviews.push(new Reviews(ID, date, comment, author, rating));
+
+  this.addReview = function (ID, date, comment, author, keyRating, valueRating) {
+    this.reviews.push(new Reviews(ID, date, comment, author, keyRating, valueRating));
   };
-  
-  this.addSize = function(newSize) {
+
+  this.addSize = function (newSize) {
     this.sizes.push(newSize);
   };
 
+  this.deleteSize = function (delitedSize) {
+    for (let i = 0; i < this.sizes.length; i++) {
+      if (this.sizes[i] == delitedSize) {
+        this.sizes.slice(i, 1);
+        return;
+      }
+    }
+    console.log('Такого значения не существует!');
   }
 
-  
-  let oneProduct = new Product('Karl');
- // oneProduct.setName('Karell');
-  oneProduct.setActiveSize('XS');
-  console.log(oneProduct);
-  console.log(oneProduct.getName());
+
+  this.getReviewByID = function (getReviewID) {
+    for (let i = 0; i < this.reviews.length; i++) {
+      if (this.reviews[i].IDrew = getReviewID) {
+        return this.reviews[i];
+      }
+    }
+    confirm.log("Такого ключа не существует!");
+  }
+
+  this.deleteReview = function (deleteRevID) {
+    for (let i = 0; i < this.reviews.length; i++) {
+      if (this.reviews[i].IDrew = getReviewID) {
+        this.reviews.slice(i, 1);
+      }
+    }
+    confirm.log("Такого ключа не существует!");
+  }
+
+  this.getAverageRating = function () {
+    let countRating = 0;
+    let summRating = 0;
+    for (let i = 0; i < this.reviews.length; i++) {
+      for (let key in this.reviews.rating) {
+        if (this.reviews.rating.key != null) {
+          summRating += this.reviews.rating.key;
+          ++countRating;
+        }
+      }
+
+    }
+    if (summRating != 0) {
+      return summRating / countRating;
+    }
+    console.log('Отзывов нет!')
+  }
 
 
-  
+
+}
+
+
+let oneProduct = new Product('Karl');
+// oneProduct.setName('Karell');
+oneProduct.setActiveSize('XS');
+console.log(oneProduct);
+console.log(oneProduct.getName());
+
+
