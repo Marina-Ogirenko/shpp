@@ -27,7 +27,7 @@ function Product(productID, productName, productDescription, productPrice,
     console.log("Картинки с таким ключем не существует");
   }
 
-  if(pathImg !=undefined) {
+  if (pathImg != undefined) {
     this.setImages(pathImg);
   }
 
@@ -35,7 +35,7 @@ function Product(productID, productName, productDescription, productPrice,
     this.ID = productID;
   }
 
-  if(productID!=undefined) {
+  if (productID != undefined) {
     this.setID(productID);
   }
 
@@ -58,7 +58,7 @@ function Product(productID, productName, productDescription, productPrice,
     this.name = productName;
   };
 
-  if(productName!=undefined) {
+  if (productName != undefined) {
     this.setName(productName);
   }
 
@@ -74,8 +74,8 @@ function Product(productID, productName, productDescription, productPrice,
     this.description = productDescription;
   };
 
-  if(productDescription!=undefined) {
-  this.setDescription(productDescription);
+  if (productDescription != undefined) {
+    this.setDescription(productDescription);
   }
 
   this.getDescription = function () {
@@ -96,7 +96,7 @@ function Product(productID, productName, productDescription, productPrice,
     this.price = productPrice;
   }
 
-  if(productPrice!=undefined) {
+  if (productPrice != undefined) {
     this.setPrice(productPrice);
   }
 
@@ -119,8 +119,8 @@ function Product(productID, productName, productDescription, productPrice,
     this.brand = productBrand;
   };
 
-  if(productBrand!=undefined) {
-  this.setBrand(productBrand);
+  if (productBrand != undefined) {
+    this.setBrand(productBrand);
   }
 
   this.getBrand = function () {
@@ -145,7 +145,7 @@ function Product(productID, productName, productDescription, productPrice,
     return this.quantity;
   }
 
-  if(productQuantity!=undefined){
+  if (productQuantity != undefined) {
     this.setQuantity(productQuantity);
   }
 
@@ -164,17 +164,17 @@ function Product(productID, productName, productDescription, productPrice,
     }
   };
 
-  if(productActiveSize!=undefined) {
-  this.setActiveSize(productActiveSize);
+  if (productActiveSize != undefined) {
+    this.setActiveSize(productActiveSize);
   }
 
   this.getActiveSize = function () {
     return this.activeSize;
   };
 
-this.getSizes = function() {
-  return this.sizes;
-}
+  this.getSizes = function () {
+    return this.sizes;
+  }
 
   this.setDate = function (productDate) {
     if (Date.parse(productDate) != NaN) {
@@ -188,8 +188,8 @@ this.getSizes = function() {
     return this.date;
   };
 
-  if(productDate!=undefined) {
-  this.setDate(productDate);
+  if (productDate != undefined) {
+    this.setDate(productDate);
   }
 
   function Reviews(ID, date, comment, author, keyRating, valueRating) {
@@ -205,7 +205,7 @@ this.getSizes = function() {
     };
 
     this.setRating = function (keyRating, valueRating) {
-      if ( (valueRating <=0 || valueRating >10)) {
+      if ((valueRating <= 0 || valueRating > 10)) {
         console.log("Некорректное значение! Field Rating");
         return;
       }
@@ -216,7 +216,7 @@ this.getSizes = function() {
       console.log("Такого ключа нет! Field Rating")
     }
 
-    if(keyRating!=undefined && valueRating!=undefined) {
+    if (keyRating != undefined && valueRating != undefined) {
       this.setRating(keyRating, valueRating);
     }
 
@@ -228,7 +228,7 @@ this.getSizes = function() {
       this.IDrew = ID;
     }
 
-    if(ID!=undefined){
+    if (ID != undefined) {
       this.setID(ID);
     }
 
@@ -251,8 +251,8 @@ this.getSizes = function() {
       this.author = author;
     };
 
-    if(author!=undefined){
-    this.setAuthor(author);
+    if (author != undefined) {
+      this.setAuthor(author);
     }
 
     this.getAuthor = function () {
@@ -271,8 +271,8 @@ this.getSizes = function() {
       return this.date;
     };
 
-    if(date!=undefined) {
-    this.setDate(date);
+    if (date != undefined) {
+      this.setDate(date);
     }
 
     this.setComment = function (comment) {
@@ -283,8 +283,8 @@ this.getSizes = function() {
       this.comment = comment;
     };
 
-    if(comment!=undefined){
-    this.setComment(comment);
+    if (comment != undefined) {
+      this.setComment(comment);
     }
 
     this.getComment = function () {
@@ -323,7 +323,7 @@ this.getSizes = function() {
 
   this.deleteReview = function (deleteRevID) {
     for (let i = 0; i < this.reviews.length; i++) {
-    
+
       if (this.reviews[i].IDrew == deleteRevID) {
         this.reviews.splice(i, 1);
         return;
@@ -345,41 +345,100 @@ this.getSizes = function() {
 
     }
     if (summRating != 0) {
-      return summRating/countRating;
+      return summRating / countRating;
     }
     console.log('Отзывов нет!')
   }
 
 }
 
-function search(arrayProducts, searchingText ) {
- for(let i = 0; i < arrayProducts.length; i++ ) {
-  let name = arrayProducts[i].getName();
+function searchProducts(arrayProducts, searchingText) {
 
- }
+  let rezultSearch = [];
+
+  let indexOfAnySinbol = searchingText.indexOf('*');
+
+  for (let i = 0; i < arrayProducts.length; i++) {
+    if (indexOfAnySinbol == -1 && arrayProducts.directSearch(arrayProducts[i], searchingText)) {
+      rezultSearch.push(arrayProducts[i]);
+    }
+    else {
+      if (advancedSearch(arrayProducts[i], searchingText, indexOfAnySinbol)) {
+        rezultSearch.push(arrayProducts[i]);
+      }
+    }
+  }
+
+  return rezultSearch;
+}
+
+function directSearch(arrayProducts, searchingText) {
+  let nameSearch = arrayProducts.getName().includes(searchingText);
+  let descriptionSearch = arrayProducts.getDescription().includes(searchingText);
+
+  return (nameSearch || descriptionSearch);
 
 }
 
+function advancedSearch(arrayProducts, searchingText, indexOfAnySinbol) {
+  let firstPartText = searchingText.slice(0, indexOfAnySinbol);
+  let secondPartText = searchingText.slice(indexOfAnySinbol + 1);
+
+  findSearch = function (field) {
+    if (field.indexOf(firstPartText) != -1) {
+      return field.includes(secondPartText, field.indexOf(firstPartText));
+    }
+  }
+  return (findSearch(arrayProducts.getName()) || findSearch(arrayProducts.getDescription()));
+}
+
+function sortProducts(arrayProducts, sortRule) {
+  switch (sortRule) {
+    case 'ID':
+      return arrayProducts.sort((a, b) => a.ID - b.ID);
+    case 'price':
+      return arrayProducts.sort((a, b) => a.price - b.price);
+    case 'name':
+      return arrayProducts.sort((a, b) => {
+        const nameA = a.name.toUpperCase(); 
+        const nameB = b.name.toUpperCase(); 
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        return 0;
+      });
+
+    default: console.log('Такого параметра сортировки нет!');
+  }
+}
+
 let products = [
-  new Product(1,'T-shirt', 'sunset over the ocean',49, 'Kal', 10, 'S',10-10-2022, 
-  'C:\Users\Марина\Pictures\/t-shots.jpg'),
-  new Product(2,'ocean', 'helllo', 81, 'Kal', 8, 'S',10-12-2022, 
-  'C:\Users\Марина\Pictures\/t-shots.jpg'),
-  new Product(3,'sunset', 'helllo my ocean!', 32, 'Kal', 6, 'S',10-12-2022, 
-  'C:\Users\Марина\Pictures\/t-shots.jpg')
+  new Product(1, 'T-shirt', 'sunset over the oceean', 49, 'Kal', 10, 'S', 10 - 10 - 2022,
+    'C:\Users\Марина\Pictures\/t-shots.jpg'),
+
+  new Product(2, 'ocean', 'helllo', 81, 'Kal', 8, 'S', 10 - 12 - 2022,
+    'C:\Users\Марина\Pictures\/t-shots.jpg'),
+
+  new Product(3, 'sunset', 'helllo my ocean!', 32, 'Kal', 6, 'S', 10 - 12 - 2022,
+    'C:\Users\Марина\Pictures\/t-shots.jpg')
 ];
 
-function search(products, ocean);
+// ==========TEST===============
+//console.log(searchProducts(products, 'sunset'));
+//console.log(sortProducts(products, 'ID'));
 
 
-
-let oneProduct = new Product(1,'T-shirt', 'sunset over the ocean',49, 'Kal', 10, 'S',10-10-2022, 
-'C:\Users\Марина\Pictures\/t-shots.jpg');
-oneProduct.addReview(1,10-09-2022,'Hello', 'abc', 'price', 10);
-oneProduct.addReview(2,10-07-2022,'Helloooo', 'avtor', 'value', 7);
-console.log(oneProduct.getImage());
-oneProduct.setImages('C:\Users\Марина\Pictures\/t.jpg');
-console.log(oneProduct.getImage(1));
+//let oneProduct = new Product(1, 'T-shirt', 'sunset over the ocean', 49, 'Kal', 10, 'S', 10 - 10 - 2022,
+//  'C:\Users\Марина\Pictures\/t-shots.jpg');
+//oneProduct.addReview(1, 10 - 09 - 2022, 'Hello', 'abc', 'price', 10);
+//oneProduct.addReview(2, 10 - 07 - 2022, 'Helloooo', 'avtor', 'value', 7);
+//console.log(oneProduct.getImage());
+//oneProduct.setImages('C:\Users\Марина\Pictures\/t.jpg');
+//console.log(oneProduct.getImage(1));
 //oneProduct.addSize('MM');
 //console.log(oneProduct.getSizes());
 //oneProduct.deleteSize('MM');
