@@ -1,5 +1,6 @@
 class AbstractProduct {
 
+  static #takenID = [];
 
     constructor(productID, productName, productDescription, productPrice,
         productBrand, productQuantity, productActiveSize, productDate, pathImg) {
@@ -7,7 +8,7 @@ class AbstractProduct {
             throw new Error(`${this.constructor.name}: can not create instance of abstract class`);
         }
         
-        this.ID;
+    this.ID;
     this.description;
     this.name;
     this.price;
@@ -18,6 +19,7 @@ class AbstractProduct {
     this.date;
     this.reviews = [];
     this.images = [];
+
 
     if (pathImg != undefined) {
         this.setImages(pathImg);
@@ -62,10 +64,6 @@ class AbstractProduct {
 
     }
 
-
-    
-
-
     setImages (pathImg) {
         this.images.push(pathImg);
       }
@@ -83,7 +81,12 @@ class AbstractProduct {
 
 
      setID (productID) {
+      if(AbstractProduct.#takenID.includes(productID)) {
+        console.log("Такой айди уже существует");
+      return;
+      }
         this.ID = productID;
+        AbstractProduct.#takenID.push(productID);
       }
     
     
@@ -190,7 +193,6 @@ class AbstractProduct {
         }
       }
     
-    
       getActiveSize () {
         return this.activeSize;
       }
@@ -268,75 +270,91 @@ class AbstractProduct {
         }
         console.log('Отзывов нет!')
       }
-    
-    }
-    
-    function searchProducts(arrayProducts, searchingText) {
-      let rezultSearch = [];
-      let indexOfAnySinbol = searchingText.indexOf('*');
-    
-      for (let i = 0; i < arrayProducts.length; i++) {
-        if (indexOfAnySinbol == -1 && arrayProducts.directSearch(arrayProducts[i], searchingText)) {
-          rezultSearch.push(arrayProducts[i]);
+
+      getFullInformation() {
+        for (let property in this) {
+          console.log(`${property} -  ${this[property]} `);
         }
-        else {
-          if (advancedSearch(arrayProducts[i], searchingText, indexOfAnySinbol)) {
-            rezultSearch.push(arrayProducts[i]);
+      }
+
+      getPriceForQuantity(int) {
+        console.log(`$${int*this.price}`);
+      }
+    
+      getter_setter (parametr, valueOfParametr) {
+        if(parametr in this) {
+          if(valueOfParametr!=undefined) {
+            this[parametr] = valueOfParametr;
           }
+          else return this[parametr];
         }
       }
-      return rezultSearch;
-    }
-    
-    function directSearch(arrayProducts, searchingText) {
-      let nameSearch = arrayProducts.getName().includes(searchingText);
-      let descriptionSearch = arrayProducts.getDescription().includes(searchingText);
-    
-      return (nameSearch || descriptionSearch);
-    }
-    
-    function advancedSearch(arrayProducts, searchingText, indexOfAnySinbol) {
-      let firstPartText = searchingText.slice(0, indexOfAnySinbol);
-      let secondPartText = searchingText.slice(indexOfAnySinbol + 1);
-    
-      findSearch = function (field) {
-        if (field.indexOf(firstPartText) != -1) {
-          return field.includes(secondPartText, field.indexOf(firstPartText));
-        }
-      }
-      return (findSearch(arrayProducts.getName()) || findSearch(arrayProducts.getDescription()));
-    }
-    
-    function sortProducts(arrayProducts, sortRule) {
-      switch (sortRule) {
-        case 'ID':
-          return arrayProducts.sort((a, b) => a.ID - b.ID);
-        case 'price':
-          return arrayProducts.sort((a, b) => a.price - b.price);
-        case 'name':
-          return arrayProducts.sort((a, b) => {
-            const nameA = a.name.toUpperCase(); 
-            const nameB = b.name.toUpperCase(); 
-            if (nameA < nameB) {
-              return -1;
-            }
-            if (nameA > nameB) {
-              return 1;
-            }
-    
-            return 0;
-          });
-    
-        default: console.log('Такого параметра сортировки нет!');
-      }
-
-
-    
-
-    
-
 
 }
+
+function searchProducts(arrayProducts, searchingText) {
+
+  let rezultSearch = [];
+
+  let indexOfAnySinbol = searchingText.indexOf('*');
+
+  for (let i = 0; i < arrayProducts.length; i++) {
+    if (indexOfAnySinbol == -1 && directSearch(arrayProducts[i], searchingText)) {
+      rezultSearch.push(arrayProducts[i]);
+    }
+    else {
+      if (advancedSearch(arrayProducts[i], searchingText, indexOfAnySinbol)) {
+        rezultSearch.push(arrayProducts[i]);
+      }
+    }
+  }
+
+  return rezultSearch;
+}
+
+function directSearch(arrayProducts, searchingText) {
+  let nameSearch = arrayProducts.getName().includes(searchingText);
+  let descriptionSearch = arrayProducts.getDescription().includes(searchingText);
+
+  return (nameSearch || descriptionSearch);
+}
+
+function advancedSearch(arrayProducts, searchingText, indexOfAnySinbol) {
+  let firstPartText = searchingText.slice(0, indexOfAnySinbol);
+  let secondPartText = searchingText.slice(indexOfAnySinbol + 1);
+
+  findSearch = function (field) {
+    if (field.indexOf(firstPartText) != -1) {
+      return field.includes(secondPartText, field.indexOf(firstPartText));
+    }
+  }
+  return (findSearch(arrayProducts.getName()) || findSearch(arrayProducts.getDescription()));
+}
+
+function sortProducts(arrayProducts, sortRule) {
+  switch (sortRule) {
+    case 'ID':
+      return arrayProducts.sort((a, b) => a.ID - b.ID);
+    case 'price':
+      return arrayProducts.sort((a, b) => a.price - b.price);
+    case 'name':
+      return arrayProducts.sort((a, b) => {
+        const nameA = a.name.toUpperCase(); 
+        const nameB = b.name.toUpperCase(); 
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        return 0;
+      });
+
+    default: console.log('Такого параметра сортировки нет!');
+  }
+}
+
 
 function Reviews(ID, date, comment, author, keyRating, valueRating) {
     this.IDrew;
@@ -443,43 +461,138 @@ function Reviews(ID, date, comment, author, keyRating, valueRating) {
 
 
 class Clothes extends AbstractProduct {
-    constructor(clothesMaterial, clothesColor) {
-        super();
+    constructor(clothesMaterial, clothesColor, productID, productName, productDescription, productPrice,
+      productBrand, productQuantity, productActiveSize, productDate, pathImg) {
+        super(productID, productName, productDescription, productPrice,
+          productBrand, productQuantity, productActiveSize, productDate, pathImg);
+
         this.material = clothesMaterial;
         this.color = clothesColor;
+
+        if (clothesMaterial!=undefined) {
+          this.setMaterial(clothesMaterial);
+        }
+
+        if (clothesColor!=undefined) {
+          this.setColor(clothesColor);
+        }
+
     }
+    setMaterial (clothesMaterial) {
+      if (typeof (clothesMaterial) != "string") {
+        console.log("Введено число, введи строку!");
+        return;
+      }
+  
+      if (clothesMaterial.length < 3) {
+        console.log("Значение слишком короткое, должно быть более 3 символов");
+        return;
+      }
+  
+      this.material = clothesMaterial;
+    }
+  
+    getMaterial () {
+      return this.material;
+    }
+
+    setColor (clothesColor) {
+      if (typeof (clothesColor) != "string") {
+        console.log("Введено число, введи строку!");
+        return;
+      }
+  
+      if (clothesColor.length < 3) {
+        console.log("Значение слишком короткое, должно быть более 3 символов");
+        return;
+      }
+  
+      this.color = clothesColor;
+    }
+  
+    getColor () {
+      return this.color;
+    }
+
 }
 
 class Electronics extends AbstractProduct {
-    constructor(clothesMaterial, clothesColor) {
-        super();
-        this.warranty = clothesMaterial;
-        this.power = clothesColor;
+    constructor(electonicsWarranty,electonicsPower,productID, productName, productDescription, productPrice,
+      productBrand, productQuantity, productActiveSize, productDate, pathImg) {
+        super(productID, productName, productDescription, productPrice,
+          productBrand, productQuantity, productActiveSize, productDate, pathImg);
+
+        this.warranty;
+        this.power;
+
+        if(electonicsPower!=undefined){
+          this.setPower(electonicsPower);
+        }
+
+        if(electonicsWarranty!=undefined) {
+          this.setWarranty(electonicsWarranty);
+        }
     }
+
+    setWarranty (electonicsWarranty) {
+    if (typeof (electonicsWarranty) != 'number') {
+      console.log("Должны быть цифры! field Price");
+      return;
+    }
+
+    if (electonicsWarranty < 0 && electonicsWarranty > 10000) {
+      console.log("Некорректное значение! field Price");
+      return;
+    }
+
+    this.warranty = electonicsWarranty;
+  }
+
+  getWarranty (){
+    return this.warranty;
+  }
+
+  setPower(electonicsPower) {
+    if (typeof (electonicsPower) != 'number') {
+      console.log("Должны быть цифры! field Price");
+      return;
+    }
+
+    if (electonicsPower < 0 && electonicsPower > 10000) {
+      console.log("Некорректное значение! field Price");
+      return;
+    }
+
+    this.power = electonicsPower;
+  }
+
 }
 
 
-  
- // let products = [
-  //  new Clothes(1, 'T-shirt', 'sunset over the oceean', 49, 'Kal', 10, 'S', 10 - 10 - 2022,
-  //    'C:\Users\Марина\Pictures\/t-shots.jpg'),
-  
- //   new Clothes(2, 'ocean', 'helllo', 81, 'Kal', 8, 'S', 10 - 12 - 2022,
-  //    'C:\Users\Марина\Pictures\/t-shots.jpg'),
-  
-//    new Clothes(3, 'sunset', 'helllo my ocean!', 32, 'Kal', 6, 'S', 10 - 12 - 2022,
- //     'C:\Users\Марина\Pictures\/t-shots.jpg')
- // ];
-  
   // ==========TEST===============
+  let products = [
+    new Clothes('Coton', 'Grey',1, 'T-shirt', 'sunset over the oceean', 49, 'Kal', 10, 'S', 10 - 10 - 2022,
+      'C:\Users\Марина\Pictures\/t-shots.jpg'),
+  
+    new Clothes('Cottton', 'Green',2, 'ocean', 'helllo', 81, 'Kal', 8, 'S', 10 - 12 - 2022,
+      'C:\Users\Марина\Pictures\/t-shots.jpg'),
+  
+    new Clothes('Coton', 'Red',3, 'sunset', 'helllo my ocean!', 32, 'Kal', 6, 'S', 10 - 12 - 2022,
+      'C:\Users\Марина\Pictures\/t-shots.jpg')
+  ];
+ // console.log(oneProduct);
+  
   //console.log(searchProducts(products, 'sunset'));
-  //console.log(sortProducts(products, 'ID'));
+  console.log(sortProducts(products, 'price'));
   
   
-  let oneProduct = new Clothes(1, 'T-shirt', 'sunset over the ocean', 49, 'Kal', 10, 'S', 10 - 10 - 2022,
-    'C:\Users\Марина\Pictures\/t-shots.jpg');
-  oneProduct.addReview(1, 10 - 09 - 2022, 'Hello', 'abc', 'price', 10);
-  oneProduct.addReview(2, 10 - 07 - 2022, 'Helloooo', 'avtor', 'value', 7);
+  //let oneProduct = new Clothes('Coton', 'Grey', 1, 'T-shirt', 'sunset over the ocean', 49, 'Kal', 10, 'S', 10 - 10 - 2022,
+  //  'C:\Users\Марина\Pictures\/t-shots.jpg');
+  //oneProduct.addReview(1, 10 - 09 - 2022, 'Hello', 'abc', 'price', 10);
+  //oneProduct.addReview(2, 10 - 07 - 2022, 'Helloooo', 'avtor', 'value', 7);
+
+ // oneProduct.getFullInformation();
+ // oneProduct.getPriceForQuantity(5);
   //console.log(oneProduct.getReviewByID(2));
   //console.log('/n');
   //console.log(oneProduct.getReviewByID(1));
@@ -489,14 +602,15 @@ class Electronics extends AbstractProduct {
   //console.log(oneProduct.getImage());
   //oneProduct.setImages('C:\Users\Марина\Pictures\/t.jpg');
   //console.log(oneProduct.getImage(1));
-  //oneProduct.addSize('MM');
-  //console.log(oneProduct.getSizes());
-  //oneProduct.deleteSize('MM');
-  //console.log(oneProduct.getSizes());
-  //console.log(oneProduct.getAverageRating());
-  //oneProduct.deleteReview(2);
+ // oneProduct.addSize('MM');
+ // console.log(oneProduct.getSizes());
+ // oneProduct.deleteSize('MM');
+ // console.log(oneProduct.getSizes());
+ // console.log(oneProduct.getAverageRating());
+ // oneProduct.deleteReview(2);
+ // console.log(oneProduct.getReviewByID(2));
   
-  console.log(oneProduct);
+  //console.log(oneProduct);
   //console.log(oneProduct.getName());
   
   
